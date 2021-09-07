@@ -39,6 +39,8 @@
 
 // header files
 
+#include <SPI.h>
+
 #include <CBUS.h>               // abstract base class
 #include <CBUSESP8266.h>        // header for this class
 #include <ACAN2515.h>           // ACAN2515 library
@@ -63,7 +65,7 @@ public:
   CBUSESP8266();
 
   // these methods are declared virtual in the base class and must be implemented by the derived class
-  bool begin(bool poll = false);    // note default arg
+  bool begin(bool poll = false, SPIClass spi = SPI);    // note default args
   bool available(void);
   CANFrame getNextMessage(void);
   bool sendMessage(CANFrame *msg, bool rtr = false, bool ext = false, byte priority = DEFAULT_PRIORITY);    // note default arguments

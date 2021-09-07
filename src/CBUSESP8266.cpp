@@ -68,7 +68,7 @@ CBUSESP8266::CBUSESP8266() {
 /// default poll arg is set to false, so as not to break existing code
 //
 
-bool CBUSESP8266::begin(bool poll) {
+bool CBUSESP8266::begin(bool poll, SPIClass spi) {
 
   uint16_t ret;
   bool retval = false;
@@ -86,15 +86,15 @@ bool CBUSESP8266::begin(bool poll) {
   settings.mTransmitBuffer2Size = _num_tx_buffers;
 
   // start SPI
-  SPI.begin();
+  spi.begin();
 
   // instantiate CAN bus object
   // if in polling mode, the interrupt pin and ISR not used
   if (_poll) {
-    can = new ACAN2515(_csPin, SPI, 255);
+    can = new ACAN2515(_csPin, spi, 255);
     ret = can->begin(settings, NULL);
   } else {
-    can = new ACAN2515(_csPin, SPI, _intPin);
+    can = new ACAN2515(_csPin, spi, _intPin);
     ret = can->begin(settings, [] {can->isr();});
   }
 
